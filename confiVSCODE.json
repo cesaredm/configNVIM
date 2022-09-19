@@ -1,0 +1,24 @@
+  //---------------------- atajos de teclado para extension vim ---------------------------
+  "vim.leader": "<space>",
+  "vim.handleKeys": {
+    "<C-b>": false,
+    "<C-j>": false
+  },
+  "vim.normalModeKeyBindings": [
+    {
+      "before": ["leader", "w"],
+      "commands": ["workbench.action.files.save"]
+    },
+    {
+      "before": ["leader", "b", "d"],
+      "commands": ["workbench.action.closeActiveEditor"]
+    },
+    {
+      "before": ["leader", "k", "z"],
+      "commands": ["workbench.action.toggleZenMode"]
+    },
+    {
+      "before": ["leader", "e"],
+      "commands": ["workbench.action.focusSideBar"]
+    }
+  ],
