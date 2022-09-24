@@ -14,7 +14,11 @@ set expandtab
 set shiftwidth=3
 
 "set nerdfont
-set guifont=JetBrainsMono\ Nerd\ Font:h11
+set guifont=JetBrains\ Mono\ Nerd\ Font:h11
+"set guifont=DroidSansMono\ Nerd\ Font\ 12
+" testing rounded separators (extra-powerline-symbols):
+let g:airline_left_sep = "\uE0B4" "uE0BC
+let g:airline_right_sep = "\uE0B6" "uE0BE
 
 "plugins
 call plug#begin()
@@ -27,16 +31,21 @@ Plug 'vim-airline/vim-airline-themes' "barra de estado
 Plug 'navarasu/onedark.nvim' "onedark 
 Plug 'ryanoasis/vim-devicons' "devicons
 Plug 'grvcoelho/vim-javascript-snippets' "javascript snippets
+Plug 'jelera/vim-javascript-syntax' "javascript syntax
+Plug 'maxmellon/vim-jsx-pretty' "soporte jsx para react o next
+Plug 'mattn/emmet-vim' "emmet
 Plug 'ellisonleao/gruvbox.nvim' "gruvbox 
 Plug 'honza/vim-snippets' "snippets para varios lenguajes de programacion
 Plug 'junegunn/fzf.vim' "fzf
 Plug 'yggdroot/indentline' "identacion 
-Plug 'sheerun/vim-polyglot'
+Plug 'sheerun/vim-polyglot' 
+"snipet react y next
+Plug 'avneesh0612/react-nextjs-snippets' 
 "prettier
 " post install (yarn install | npm install) then load plugin only for editing supported files
 Plug 'prettier/vim-prettier', {
   \ 'do': 'yarn install --frozen-lockfile --production',
-  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html','ejs'] }
+  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html','ejs','jsx'] }
 "FZF
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
@@ -56,6 +65,7 @@ Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'connorholyday/vim-snazzy'
 Plug 'Rigellute/shades-of-purple.vim'
 Plug 'dunstontc/vim-vscode-theme'
+Plug 'sickill/vim-monokai'
 call plug#end()
 
 "config tokyonight
@@ -90,12 +100,14 @@ let g:material_terminal_italics = 1
 let g:material_theme_style = 'default'  "'default' | 'palenight' | 'ocean' | 'lighter' | 'darker'
 
 "set theme
-colorscheme gruvbox-material 
+colorscheme dracula "gruvbox-material 
+
 
 "vim airline
 let g:airline#extensions#tabline#enabled = 1
-let g:airline_theme='gruvbox_material'
-
+let g:airline_powerline_fonts = 1 "para darle forma a powerline y airline
+let g:Powerline_symbols = 'fancy'
+let g:airline_theme='dracula'
 "keybins
 let mapleader=" "
 nmap <TAB> :bnext<CR>
@@ -190,6 +202,37 @@ let g:coc_explorer_global_presets = {
 \   },
 \ }
 
+
+"config pata emmet - habilitar lenguajes
+let g:user_emmet_install_global = 1
+let g:user_emmet_mode = 'a'
+let g:user_emmet_leader_key = ','
+autocmd FileType html,css,javascript.jsx EmmetInstall
+"config de emmet
+let g:user_emmet_settings = {
+\  'variables': {'lang': 'ja'},
+\  'html': {
+\    'default_attributes': {
+\      'option': {'value': v:null},
+\      'textarea': {'id': v:null, 'name': v:null, 'cols': 5},
+\    },
+\    'snippets': {
+\      'html:5': "<!DOCTYPE html>\n"
+\              ."<html lang=\"${lang}\">\n"
+\              ."<head>\n"
+\              ."\t<meta charset=\"${charset}\">\n"
+\              ."\t<title></title>\n"
+\              ."\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n"
+\              ."</head>\n"
+\              ."<body>\n\t${child}|\n</body>\n"
+\              ."</html>",
+\    },
+\  },
+\  'javascript':{
+   \ 'extends':'jsx'
+  \ },
+\}
+
 autocmd BufEnter * if (winnr("$") == 1 && &filetype == 'coc-explorer') | q | endif
 augroup coc-explorer
   if @% == '' || @% == '.'
@@ -200,6 +243,8 @@ augroup END
 if exists('#User#CocGitStatusChange')
   doautocmd <nomodeline> User CocGitStatusChange
 endif
+
+
 
 " asignar enter para seleccionar el autocompletado
 inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
